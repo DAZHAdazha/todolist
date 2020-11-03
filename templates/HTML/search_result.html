@@ -1,0 +1,68 @@
+{% extends './navi.html' %}
+{% block main %}
+
+
+
+
+<div class="container grey">
+    <div class="row">
+            <div class="col-md-3">
+                <div class="head">
+                    Image
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="head">
+                      Price  
+                </div>
+                </div>
+            <div class="col-md-3">
+                <div class="head">
+                    Product
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="head">
+                    Seller
+                </div>
+            </div>
+        </div>
+        {% for product in products %}
+        <div class="row">
+                <div class="col-md-3">
+                    <div class="height">
+                            <img title="{{ product.name }}" src="{{ product.img_path }}" alt="{{ product.name }}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="myorders">
+                        {{ product.price }}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                        <div class="myorders">
+                                <a href="{{ product.product_path }}">
+                                    <u>
+                                        {{ product.name }}
+                                    </u>
+                                </a>
+                            </div>
+                </div>
+                <div class="col-md-3">
+                        <div class="myorders">
+                                <a href="{{ product.seller_path }}">
+                                    <u>
+                                        {{ product.seller }}
+                                    </u>
+                                </a>
+                            </div>
+                </div>
+            </div>
+            {% endfor %}
+    </div>
+</div>
+
+
+
+
+{% endblock %}

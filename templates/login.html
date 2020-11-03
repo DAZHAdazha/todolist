@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!--注意默认form为get请求，所以需要注明-->
+<form action="{{ url_for('login') }}" method="post">
+    <table>
+        <tbody>
+        <tr>
+            <td>用户名</td>
+            <td>
+                <input type="text" placeholder="请输入用户名" name="username">
+            </td>
+            <td>密码</td>
+            <td>
+                <input type="text" placeholder="请输入密码" name="password">
+            </td>
+            <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="登录">
+            </td>
+        </tr>
+        </tr>
+        </tbody>
+    </table>
+
+</form>
+
+</body>
+</html>

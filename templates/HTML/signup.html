@@ -1,0 +1,95 @@
+{%  block scripts %}
+        <script src="{{ url_for('static',filename='javascript/signup.js') }}"></script>
+{% endblock %}
+
+     <!-- 继承模板 -->
+{% extends '/navi.html' %}
+<!-- block main 写法可以对应父模板定义的位置进行实现 -->
+{% block main%}
+
+     <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+
+            </div>
+            <div id="sign-form" class="col-md-6">
+                    <div class="input-group-lg">
+                        <div class="input-info">
+                            User Name
+                        </div>
+                        <input id="name" type="text" class="form-control" placeholder="please enter user name with 6-20 characters">
+                      </div>
+
+                      <div class="status hidden">
+                           Invalid name
+                       </div>
+                       <div class="input-group-lg">
+                       <div class="input-info">
+                            Age
+                        </div>
+                        <input id="age" type="text" class="form-control" placeholder="please enter your age">
+                    </div>
+                        <div class="status hidden">
+                            Invalid age number or you are not 18-year-old
+                        </div>
+                        <div class="input-group-lg">
+                        <div class="input-info">
+                            Phone
+                        </div>
+                        <input id="phone" type="text" class="form-control" placeholder="please enter your phone number(11 digits)">
+                    </div>
+                       <div class="status hidden">
+                           Invalid phone number
+                       </div>
+                       <div class="input-group-lg">
+                       <div class="input-info">
+                            Password
+                        </div>
+                        <input id="password" type="password" class="form-control" placeholder="please enter password with 8-32 characters">
+                      </div>
+                      <div class="status hidden">
+                        Invalid password
+                       </div>
+                       <div class="input-group-lg">
+                       <div class="input-info">
+                            Repeat Password
+                        </div>
+                        <input id="repeat-password" type="password" class="form-control" placeholder="please enter your password again to verify">
+                       </div>
+                       <div class="status hidden">
+                           The passwords you entered are not the same
+                       </div>
+
+
+                       <div class="input-info">
+                        Verification Code
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="clear-padding col-md-6">
+                                    <div class="input-group-lg">
+                                    <input id="verification_code" type="text" class="form-control" placeholder="enter verification code">
+                                    </div>
+                            </div>
+                            <div  class="col-md-6">
+                                <div id="verification_image" class="row">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                   <div class="status hidden">
+                       Invalid verification code
+                   </div>
+
+                       <div id="sign-btn" class="btn btn-success btn-lg">
+                           Sign Up
+                       </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
