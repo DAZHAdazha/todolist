@@ -3,7 +3,7 @@ from todolist import app # 新建Manager对象需要传递app参数
 from db_script import db_manager
 from flask_migrate import Migrate, MigrateCommand
 from exts import db
-from models import User, User_Data, Record  # 数据迁移时需要在manage文件用import引入需要导入Model
+from models import User, Record  # 数据迁移时需要在manage文件用import引入需要导入Model
 
 
 manager = Manager(app)

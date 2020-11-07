@@ -1,5 +1,40 @@
+function check(){
+  var search = $("#search").val();
+   if(search == null || search == ""){
+　　　 return false;
+    }
+　　　　return true;
+}
+
+function addCheck(){
+    var title = $("#title").val();
+    var description = $("#description").val();
+    if(title == null || title == "" || description == null || description == ""){
+        return false;
+    }
+        alert("submit sucessfully!");
+        return true;
+}
+
 $(document).ready(function () {
     var path = window.location.href.toString();
+    // check whether search for nothing
+    $("#search_btn").click(function(){
+        var search = $("#search").val();
+        if(search.length==0){
+            alert("Please enter search keyword!");
+        }
+    });
+
+    $("#submit-task").click(function(){
+        var title = $("#title").val();
+        var description = $("#description").val();
+        if(title == null || title == "" || description == null || description == ""){
+            alert("Please enter title and description!");
+        }
+    });
+    
+
 
     // center the modal 
     var $modal_btn = $('#modalBtn');
@@ -76,64 +111,4 @@ $(document).ready(function () {
     }
     size();
     window.onresize = size;
-
-    //post
- 
-    var path_split = path.split("/");
-    var path_split_length = path_split.length;
-    var current = path_split[path_split_length - 1].replace(".html", "");
-    current_star = current + "_star";
-
-    
-    $(".star").click(function () {
-        $.post(path);  //post request
-    });
-
-    /*
-    //star
-    var path_split = path.split("/");
-    var path_split_length = path_split.length;
-    var current = path_split[path_split_length - 1].replace(".html", "");
-    current_star = current + "_star";
-    function star_toggle() {
-        if (!localStorage.getItem(current_star) && localStorage.getItem(current_star) != 0) {
-            localStorage.setItem(current_star, 1);
-        } else {
-            if (localStorage.getItem(current_star) == 1) {
-                localStorage.setItem(current_star, 0);
-            } else {
-                localStorage.setItem(current_star, 1);
-            }
-        }
-    }
-
-    function check_status() {
-        if (localStorage.getItem(current_star) == 1) {
-            $(".star").attr("src", "../static/star.png");
-        } else {
-            $(".star").attr("src", "../static/unstar.png");
-        }
-    }
-    check_status();
-    $(".star").click(function () {
-        star_toggle();
-        check_status();
-    });
-    */
-    //add to cart
-    current_cart = current + "_cart";
-    function cart_add(){
-        localStorage.setItem(current_cart, 1);
-    }
-    function cart_remove(){
-        localStorage.setItem(current_cart, 0);
-    }
-    $("#add_cart").click(function(){
-        cart_add();
-        alert("You had added the product to cart successfully!");
-    });
-    $("#remove_cart").click(function(){
-        cart_remove();
-        alert("You had removed the product to cart successfully!");
-    });
 });

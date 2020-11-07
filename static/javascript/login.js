@@ -1,7 +1,6 @@
 $(document).ready(function () {
 
     function login(){
-        console.log("here");
         if($("#name").val()!='' && $("#password").val()!=''){
             var path = '../login';
             $.post(path,{username: $("#name").val(), password: $("#password").val(),remember: $("#remember-me").is(":checked")},
@@ -15,7 +14,6 @@ $(document).ready(function () {
                     alert("Wrong username of password, please try again.");
                 }
             });  //post request {}内为传递的数据, function为请求成功运行的函数 重要！！！
-
         }
         else{
             alert("Some columns are empty or wrong, please try again.");
@@ -32,8 +30,7 @@ $(document).ready(function () {
         if (event.keyCode == "13") {
             login();
         }
-    }); 
-    
+    });
 });
 
 

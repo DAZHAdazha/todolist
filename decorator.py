@@ -2,7 +2,7 @@ from functools import wraps
 from flask import redirect, url_for, session
 
 
-# 登录限制装饰器 增加到购物车等函数
+# login required decorator
 def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):

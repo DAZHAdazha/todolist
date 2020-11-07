@@ -14,7 +14,7 @@
 <!-- 注意此处所有静态文件需要放到static文件夹下，并且使用url_for()函数导入链接   -->
     <link media="(max-width:991px)" rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}" media="print" />
-    <meta name="keywords" content="wabao,e-shopping,good products,reasonable price">
+    <meta name="keywords" content="toDo, get your things to do!">
     <script src="{{ url_for('static', filename='javascript/jquery-3.4.1.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/bootstrap/js/bootstrap.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/main.js') }}"></script>
@@ -37,13 +37,13 @@
     <div class="top-navi">
         <div class="containers clear-float">
             <div class="fl">
-                <a id="home" href="{{ url_for('index') }}">
+                <a id="home" class="item" href="{{ url_for('index') }}">
                     Home
                 </a>
             </div>
             <div class="fr">
                 {% if user %}
-                    <a class="item" href="./user.html">{{ user.username }}</a>
+                    <a class="item" href="{{ url_for('user') }}">{{ user.username }}</a>
                     <a class="item" href="{{ url_for('logout') }}">Log Out</a>
                 {% else %}
                     <label class="item" for="log-in">Log In</label>
@@ -74,8 +74,8 @@
                         <input id="input-password" type="password" class="form-control">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <button id="login" type="button" class="btn btn-primary">Log In</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <label id="remember">
                             <input id="remember-me" type="checkbox" value="remember-me"> remember me
                         </label>
@@ -99,18 +99,17 @@
                     </span>
                     <img id="icon" title="toDo!-icon" src="{{ url_for('static', filename='img/note.png') }}" alt="toDo!-icon">
                 </div>
-                <div class="col-md-6 search-bar">
-                    <form action="{{ url_for('search') }}" method="GET">
+                <div class="col-md-7 search-bar">
+                        <!--     check function to avoid post               -->
+                    <form action="{{ url_for('search') }}" method="GET" onsubmit="return check()">
                         <!-- name="q" -> address form: search/?q= -->
-                    <input name="q" id="search" type="text" placeholder="Enter product name or price ">
-                    <button type="submit">
+                    <input name="q" id="search" type="text" placeholder="Enter task you want to search ">
+                    <button type="submit" id="search_btn">
                         Search
                     </button>
                 </form>
                 </div>
-                <div class="col-md-3 cart">
 
-                </div>
             </div>
         </div>
     </div>

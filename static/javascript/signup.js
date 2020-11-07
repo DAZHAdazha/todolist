@@ -27,26 +27,6 @@ $(document).ready(function () {
                 $(this).removeClass("green");
                 $(this).addClass("red");
             }
-        } else if (id == "age") {
-            if (val == $.trim(val) && Number.isInteger(parseFloat(val)) && parseInt(val) >= 18 && parseInt(val) <= 120) {
-                $(this).parent().next().addClass("hidden");
-                $(this).removeClass("red");
-                $(this).addClass("green");
-            } else {
-                $(this).parent().next().removeClass("hidden");
-                $(this).removeClass("green");
-                $(this).addClass("red");
-            }
-        } else if (id == "phone") {
-            if (val == $.trim(val) && val.length==11) {
-                $(this).parent().next().addClass("hidden");
-                $(this).removeClass("red");
-                $(this).addClass("green");
-            } else {
-                $(this).parent().next().removeClass("hidden");
-                $(this).removeClass("green");
-                $(this).addClass("red");
-            }
         } else if (id == "password") {
             if (val == $.trim(val) && val.length>=8 && val.length<=32) {
                 $(this).parent().next().addClass("hidden");
@@ -93,8 +73,6 @@ $(document).ready(function () {
     //local storage
     function store(username,password,age,phone){
         localStorage.setItem(username,password);
-        localStorage.setItem(username + "_age",age);
-        localStorage.setItem(username + "_phone",phone);
     }
     $(".form-control").each(function () {
        $(this).keyup(get_val);
@@ -103,11 +81,10 @@ $(document).ready(function () {
 
     function sign(){
         $(".form-control").each(get_val);
-        if($("#name").parent().next().hasClass("hidden")&&$("#age").parent().next().hasClass("hidden")
-        &&$("#phone").parent().next().hasClass("hidden")&&$("#password").parent().next().hasClass("hidden")
+        if($("#name").parent().next().hasClass("hidden")&&$("#password").parent().next().hasClass("hidden")
         &&$("#repeat-password").parent().next().hasClass("hidden")&&$("#verification_code").parent().parent().parent().parent().next().hasClass("hidden")){
             var path = window.location.href.toString();
-            $.post(path,{username: $("#name").val(), password: $("#password").val(),age:$("#age").val(),phone:$("#phone").val()},
+            $.post(path,{username: $("#name").val(), password: $("#password").val()},
             function(data){
                 if(data == '1'){
                     alert("Sign up successfully!");
@@ -118,7 +95,6 @@ $(document).ready(function () {
                     alert("This username had been registered already!");
                 }
             });  //post request {}内为传递的数据, function为请求成功运行的函数 重要！！！
-
         }
         else{
             alert("Some columns are empty or wrong, please try again.");
@@ -137,19 +113,7 @@ $(document).ready(function () {
         if (event.keyCode == "13") {
             sign();
         }
-    }); 
-    
-    $('#age').bind('keypress', function (event) {
-        if (event.keyCode == "13") {
-            sign();
-        }
-    }); 
-    
-    $('#phone').bind('keypress', function (event) {
-        if (event.keyCode == "13") {
-            sign();
-        }
-    }); 
+    });
     
     $('#password').bind('keypress', function (event) {
         if (event.keyCode == "13") {
