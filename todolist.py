@@ -12,7 +12,7 @@ import datetime
 from sqlalchemy import func
 
 # 初始化一个flaskd对象 传递一个"__name__"
-# 1.方便flask框架去寻找资源
+# 1.方便flask框架去寻找资源l
 # 2.方便flask插件比如Flask-Sqlalchemy出现错误时，好去寻找出错的位置
 app = Flask(__name__)
 app.config.from_object(config) # 导入配置文件

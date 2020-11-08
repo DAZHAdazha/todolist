@@ -4,24 +4,18 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)  # autoincrement为自增
-    username = db.Column(db.String(16), unique=True, nullable=False)  # nullable=False 不能为空
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False) 
+    username = db.Column(db.String(16), unique=True, nullable=False) 
     password = db.Column(db.String(32), nullable=False)
-
-    # 第一参数为要关联的表的模型的名字,作为正向引用，backref表示反向引用，以后可以通过User.user_records反向引用来通过user对象查找
-    # 对应User_record表的数据
     records = db.relationship('Record', backref="user", lazy='dynamic')
 
     def __init__(self, *args, **kwargs):
         username = kwargs.get('username')
         password = kwargs.get('password')
         records = kwargs.get('records')
-        # self.records = records
         self.username = username
-        # 加密密码，注意需要导入
         self.password = generate_password_hash(password)
 
-    # 检查密码函数
     def check_password(self, raw_password):
         result = check_password_hash(self.password, raw_password)
         return result
