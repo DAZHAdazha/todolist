@@ -45,7 +45,7 @@ passing_data = {'signup_user': 0}  # 若字典中嵌套字典或字典中存储�
 # 此处装饰器作用是做一个url与视图函数的映射
 @app.route('/', methods=['GET', 'POST']) # url
 def index(): # 视图函数
-    return render_template('./homePage.html', passing_data=passing_data)
+    return render_template('./HTML/homePage.html', passing_data=passing_data)
 
 
 @app.route('/HTML/<file>')
@@ -70,15 +70,9 @@ def newTask():
 @app.route('/HTML/user.html')
 @login_required
 def user():
-    try:
-        record_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id).scalar()
-
-        completed_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id, Record.status ==
-                                                                         True).scalar()
-        uncompleted_count = record_count - completed_count
-    except:
-        pass
-
+    record_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id).scalar()
+    completed_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id, Record.status == True).scalar()
+    uncompleted_count = record_count - completed_count
     return render_template('./HTML/user.html', passing_data=passing_data, record_count=record_count,
                            completed_count=completed_count, uncompleted_count=uncompleted_count)
 
@@ -131,6 +125,7 @@ def my_context_processor():
 
 
 @app.route('/logout/')
+@login_required
 def logout():
     del session['user_username']
     return redirect(url_for('jump_to', file='HTML/login.html'))
@@ -165,29 +160,28 @@ def viewUncompleted():
 @login_required
 def taskStatus(task_id):
     record = Record.query.filter(task_id == Record.id).first()
-    if record.status == True:
-        record.status = False
-        record.finish_time = None
+    if record:
+        if record.status == True:
+            record.status = False
+            record.finish_time = None
+        else:
+            record.status = True
+            current_time = datetime.datetime.now()
+            record.finish_time = current_time
+        db.session.commit()
     else:
-        record.status = True
-        current_time = datetime.datetime.now()
-        record.finish_time = current_time
-    db.session.commit()
+        return render_template('./HTML/error.html', passing_data=passing_data)
     return redirect(request.referrer)
 
 
 @app.route('/search/')
 @login_required
 def search():
-    # 获取html页面中传入的参数(search?xxx1=xxx1&xxx2=xxx2形式),得到的为字典
     q = request.args.get('q')
     count = db.session.query(func.count(Record.id)).filter(or_(Record.title.contains(q), Record.description.contains(q),
-                                      Record.date.contains(q)), g.user.id == Record.user_id).scalar()
+                                      Record.date.contains(q), Record.finish_time.contains(q)), g.user.id == Record.user_id).scalar()
     records = Record.query.filter(or_(Record.title.contains(q), Record.description.contains(q),
-                                      Record.date.contains(q)), g.user.id == Record.user_id).order_by('id')
-
-    # 若render_template出现error： 不是json type, 则是在html中定义了passing data, 而没有传过去的原因
-    # return render_template('./HTML/search_result.html', passing_data=passing_data)
+                                      Record.date.contains(q), Record.finish_time.contains(q)), g.user.id == Record.user_id).order_by('id')
     return render_template('./HTML/search_result.html', passing_data=passing_data, records=records, count=count)
 
 
@@ -203,7 +197,10 @@ def my_before_quest():
 @login_required
 def viewTask(task_id):
     record = Record.query.filter(task_id == Record.id).first()
-    return render_template('./HTML/viewTask.html', passing_data=passing_data, record=record)
+    if record:
+        return render_template('./HTML/viewTask.html', passing_data=passing_data, record=record)
+    else:
+        return render_template('./HTML/error.html', passing_data=passing_data)
 
 
 @app.route('/addTask/')
@@ -211,12 +208,9 @@ def viewTask(task_id):
 def addTask():
     title = request.args.get('title')
     description = request.args.get('description')
-
     current_time = datetime.datetime.now()
     current_user_id = g.user.id
-
     new_record = Record(user_id=current_user_id, date=current_time, title=title, description=description)
-
     db.session.add(new_record)
     db.session.commit()
     return redirect(request.referrer)
@@ -226,15 +220,14 @@ def addTask():
 @login_required
 def changeTask(task_id):
     record = Record.query.filter(Record.id == task_id).first()
-
-    title = request.args.get('title')
-    description = request.args.get('description')
-
-    record.title = title
-    record.description = description
-
-    db.session.commit()
-
+    if record:
+        title = request.args.get('title')
+        description = request.args.get('description')
+        record.title = title
+        record.description = description
+        db.session.commit()
+    else:
+        return render_template('./HTML/error.html', passing_data=passing_data)
     return redirect(url_for('viewAll'))
 
 
@@ -247,7 +240,7 @@ def removeTask(task_id):
         db.session.delete(record)
         db.session.commit()
     else:
-        return render_template('./HTML/404.html', passing_data=passing_data)
+        return render_template('./HTML/error.html', passing_data=passing_data)
     return redirect(request.referrer)
 
 
