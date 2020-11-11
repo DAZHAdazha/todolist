@@ -1,51 +1,38 @@
-
 {% extends '/HTML/template.html' %}
 
 {%  block scripts %}
-    <script src="{{ url_for('static',filename='javascript/login.js') }}"></script>
+<script src="{{ url_for('static',filename='javascript/login.js') }}"></script>
 {% endblock %}
 
 {% block main%}
 
 <br>
-
-
 <div class="container">
     <div class="row">
-
-
-
         <div class="col-md-3">
         </div>
         <div id="sign-form-login" class="col-md-6">
-
             <br>
-            
-                <div class="input-group-lg">
-                    <div class="input-info">
-                        User Name
-                    </div>
-                    <input id="name" type="text" class="form-control" placeholder="please enter user name ">
-                  </div>
-
-                  <br>
-
-                   <div class="input-group-lg">
-                   <div class="input-info">
-                        Password
-                    </div>
-                    <input id="password" type="password" class="form-control" placeholder="please enter password ">
-                  </div>
-
-                  <br>
-                  
-                   <div id="login-btn" class="btn btn-success btn-lg">
-                       Log in
-                   </div>
-                   <label id="remembered">
-                    <input id="remembered-me" type="checkbox" value="remembered-me"> remember me
-                </label>
-
+            <div class="input-group-lg">
+                <div class="input-info">
+                    User Name
+                </div>
+                <input id="name" type="text" class="form-control" placeholder="please enter user name ">
+            </div>
+            <br>
+            <div class="input-group-lg">
+                <div class="input-info">
+                    Password
+                </div>
+                <input id="password" type="password" class="form-control" placeholder="please enter password ">
+            </div>
+            <br>
+            <div id="login-btn" class="btn btn-success btn-lg">
+                Log in
+            </div>
+            <label id="remembered">
+                <input id="remember-me" type="checkbox" value="remembered-me"> Remember me
+            </label>
         </div>
     </div>
 </div>

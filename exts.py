@@ -1,4 +1,4 @@
 from flask_sqlalchemy import SQLAlchemy
 
-# 解决循环引用问题
+# solution to recursively reference
 db = SQLAlchemy()

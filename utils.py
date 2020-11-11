@@ -1,6 +1,5 @@
 from flask import g
 
-
-# 登录日志
+# log-in log to record current username
 def login_log():
     print('Current log in user:' + g.username)

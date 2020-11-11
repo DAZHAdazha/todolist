@@ -1,52 +1,44 @@
 {% extends '/HTML/template.html' %}
 {% block main%}
 
-<div class="container"> 
-        <div class="row">
-            <div class="col-md-2">
-
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="user col-md-8">
+            <img title="avatar" src="{{ url_for('static',filename='img/avatar.png') }}" alt="avatar">
+            <div class="user_text">
+                Username:
+                <span class="user_info">{{ g.user.username }}</span>
+                <a href=" {{ url_for('viewAll') }} ">
+                    <p class="user_info"> All: {{ record_count }}</p>
+                </a>
+                <a href=" {{ url_for('viewCompleted') }} ">
+                    <p class="user_info"> Completed: {{ completed_count }}</p>
+                </a>
+                <a href=" {{ url_for('viewUncompleted') }} ">
+                    <p class="user_info"> Uncompleted: {{ uncompleted_count }}</p>
+                </a>
             </div>
-            <div class="user col-md-8">
-                <img title="avatar" src="{{ url_for('static',filename='img/avatar.png') }}" alt="avatar">
-                <div class="user_text">
-                    Username:
-                    <span class="user_info">{{ g.user.username }}</span>
-
-                    <a href=" {{ url_for('viewAll') }} ">
-                        <p class="user_info"> All: {{ record_count }}</p>
-                    </a>
-
-                    <a href=" {{ url_for('viewCompleted') }} ">
-                        <p class="user_info"> Completed: {{ completed_count }}</p>
-                    </a>
-                    <a href=" {{ url_for('viewUncompleted') }} ">
-                        <p class="user_info"> Uncompleted: {{ uncompleted_count }}</p>
-                    </a>
-                </div>
-                <a href="{{ url_for('index') }}">
+            <a href="{{ url_for('index') }}">
                 <button id="log_out" class="btn btn-lg btn-primary">
                     Log Out
                 </button>
-                </a>
-
-                
-
-            </div>
-            <div class="col-md-2">
-
-            </div>
+            </a>
+        </div>
+        <div class="col-md-2">
         </div>
     </div>
-
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 {% endblock %}

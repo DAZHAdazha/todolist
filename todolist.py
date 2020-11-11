@@ -11,60 +11,52 @@ from sqlalchemy import or_
 import datetime
 from sqlalchemy import func
 
-# 初始化一个flaskd对象 传递一个"__name__"
-# 1.方便flask框架去寻找资源l
-# 2.方便flask插件比如Flask-Sqlalchemy出现错误时，好去寻找出错的位置
+# initialize a flask object by transmitting a "__name__"
+# 1.convenient for flask frame to locate resource
+# 2.convenient for locate errors when flask plug-in like Flask-SqlAlchemy goes wrong
 app = Flask(__name__)
-app.config.from_object(config) # 导入配置文件
-db.app = app  # !!!很重要分开models文件时记得加上
-db.init_app(app)  # 为解决循环引用问题
+# import config file
+app.config.from_object(config)
+# very important! when dividing models file with this script!
+db.app = app
+# to solve the problem of recursive reference
+db.init_app(app) 
 
-# with app.app_context():  #flask中上下文问题，db可以init多个app，但是需要手动将app推入服务器的app栈才能作用，此语句即用于将当前app推入app栈
-#     db.create_all()
-
-
-# jinja2模板加载变量的{{ }}和jquery-tmpl插件中的{{ }}相冲突的解决方案，用于js读取flask传递json数据
+# solution for conflicts between jinja2 templates loading variable identifier "{{ }}" and jQuery-tmpl plug-in identifier"{{ }}",
+# using for passing data from flask to json
 app.jinja_env.variable_start_string = '{{ '
 app.jinja_env.variable_end_string = ' }}'
 
-# 配置mysql
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:fengyunjia@127.0.0.1:3306/wabao'  # dialect+driver://username:password@hostname/database
-# 是否动态修改 如为True 则会消耗性能 且改接口以后会被弃用 不建议开启
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# SQLAlchemy是导入的一个类，因此需要新建一个db对象
-
-# 设置session过期时间
+# setting session overdue time 
 # from datetime import timedelta
 # app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 
 app.secret_key = 'dazha' # import os; app.secret_key = os.urandom(24) # 用os库自动生成24位的secret key
 
-passing_data = {'signup_user': 0}  # 若字典中嵌套字典或字典中存储对象，在html中都可以使用object(dic).attr的形式访问变量，也可以使用object(dic)['attr']的形式
+# if there is nested dictionary or object stored in dictionary, "object(dic).attr" could be used in HTML to visit variables
+# or using the form of "object(dic)['attr']"
+passing_data = {'signup_user': 0}  
 
-
-# 此处装饰器作用是做一个url与视图函数的映射
+# this decorator will project to a url view function
 @app.route('/', methods=['GET', 'POST']) # url
-def index(): # 视图函数
-    return render_template('./HTML/homePage.html', passing_data=passing_data)
+def index(): # view function
+    return render_template('./HTML/index.html')
 
 
 @app.route('/HTML/<file>')
 def jump(file):
-    # 判断是否注册，若没有注册则初始化数据，否则调用数据库的数据
-
-    return render_template('./HTML/' + file, passing_data=passing_data)
+    return render_template('./HTML/' + file)
 
 
 @app.route('/<file>')
 def jump_to(file):
-    return render_template('./' + file, passing_data=passing_data)
+    return render_template('./' + file)
 
 
 @app.route('/HTML/newTask.html')
 @login_required
 def newTask():
-    return render_template('./HTML/newTask.html', passing_data=passing_data)
-
+    return render_template('./HTML/newTask.html')
 
 
 @app.route('/HTML/user.html')
@@ -73,62 +65,66 @@ def user():
     record_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id).scalar()
     completed_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id, Record.status == True).scalar()
     uncompleted_count = record_count - completed_count
-    return render_template('./HTML/user.html', passing_data=passing_data, record_count=record_count,
+    return render_template('./HTML/user.html', record_count=record_count,
                            completed_count=completed_count, uncompleted_count=uncompleted_count)
 
 
-@app.route('/HTML/signup.html', methods=['GET', 'POST'])
+@app.route('/HTML/sign-up.html', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         data = request.form
-        new_user = User(username=data['username'], password=data['password'])
-        user = User.query.filter(User.username == data['username']).first()
+        user = User.query.filter(User.email == data['email']).first()
         if user:
             return '0'
         else:
+            new_user = User(username=data['username'], password=data['password'], email=data['email'])
             db.session.add(new_user)
             db.session.commit()
-            session['user_username'] = data['username']
+            session['user_email'] = data['email']
             return '1'
-
     elif request.method == 'GET':
-        return render_template('./HTML/signup.html', passing_data=passing_data)
+        return render_template('./HTML/sign-up.html')
 
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/HTML/log-in.html', methods=['POST', 'GET'])
 def login():
-    data = request.form
-    user = User.query.filter(User.username == data['username']).first()
-    if user:
-        if user.check_password(data['password']):
-            session['user_username'] = user.username
-            if data['remember'] == 'true':
-                session.permanent = True
+    if request.method == 'POST':
+        data = request.form
+        user = User.query.filter(User.email == data['email']).first()
+        if user:
+            if user.check_password(data['password']):
+                session['user_email'] = user.email
+                if data['remember'] == 'true':
+                    session.permanent = True
+                else:
+                    session.permanent = False
+                return '1'
             else:
-                session.permanent = False
-            return '1'
+                return '2'
         else:
-            return '2'
+            return '0'
     else:
-        return '0'
+        return render_template('./HTML/log-in.html')
 
-# 执行顺序： @before_request -> 视图函数 -> @context_processor
-# context_processor: 上下文处理器,作为钩子函数
+
+# executing sequence： @before_request -> view function -> @context_processor
+# context_processor: working as hook
 @app.context_processor
 def my_context_processor():
-    # 判断g对象是否有user属性
+    # whether g object has user attribute
     if hasattr(g, 'user'):
         return {'user': g.user}
     else:
-        # 注意这个装饰器修饰的钩子函数，必须要返回一个字典，即使为空也要返回
+        # note that hook functions warpped by this decorator need to return a dictionary(even it is empty)
         return {}
 
 
 @app.route('/logout/')
 @login_required
 def logout():
-    del session['user_username']
-    return redirect(url_for('jump_to', file='HTML/login.html'))
+    del session['user_email']
+    print("here")
+    return redirect(url_for('login'))
 
 
 @app.route('/viewAll/')
@@ -136,7 +132,7 @@ def logout():
 def viewAll():
     record_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id).scalar()
     records = Record.query.filter(g.user.id == Record.user_id).order_by('id')
-    return render_template('./HTML/search_result.html', passing_data=passing_data, records=records, count=record_count)
+    return render_template('./HTML/search_result.html', records=records, count=record_count)
 
 
 @app.route('/viewCompleted/')
@@ -145,7 +141,7 @@ def viewCompleted():
     completed_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id, Record.status ==
                                                                      True).scalar()
     records = Record.query.filter(g.user.id == Record.user_id, Record.status == True).order_by('id')
-    return render_template('./HTML/search_result.html', passing_data=passing_data, records=records, count=completed_count)
+    return render_template('./HTML/search_result.html', records=records, count=completed_count)
 
 
 @app.route('/viewUnompleted/')
@@ -154,7 +150,7 @@ def viewUncompleted():
     uncompleted_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id, Record.status ==
                                                                      False).scalar()
     records = Record.query.filter(g.user.id == Record.user_id, Record.status == False).order_by('id')
-    return render_template('./HTML/search_result.html', passing_data=passing_data, records=records, count=uncompleted_count)
+    return render_template('./HTML/search_result.html',records=records, count=uncompleted_count)
 
 @app.route('/taskStatus/<task_id>')
 @login_required
@@ -170,37 +166,40 @@ def taskStatus(task_id):
             record.finish_time = current_time
         db.session.commit()
     else:
-        return render_template('./HTML/error.html', passing_data=passing_data)
+        return render_template('./HTML/error.html')
     return redirect(request.referrer)
 
 
 @app.route('/search/')
 @login_required
 def search():
+    print('here')
     q = request.args.get('q')
     count = db.session.query(func.count(Record.id)).filter(or_(Record.title.contains(q), Record.description.contains(q),
                                       Record.date.contains(q), Record.finish_time.contains(q)), g.user.id == Record.user_id).scalar()
     records = Record.query.filter(or_(Record.title.contains(q), Record.description.contains(q),
                                       Record.date.contains(q), Record.finish_time.contains(q)), g.user.id == Record.user_id).order_by('id')
-    return render_template('./HTML/search_result.html', passing_data=passing_data, records=records, count=count)
+    return render_template('./HTML/search_result.html', records=records, count=count)
 
 
-# before_request: 在请求之前执行，作为钩子函数实在视图函数执行之前执行的，这个函数只是一个装饰器，它可以把需要设置为钩子函数的代码放到视图函数执行之前执行
+# before_request: execute before requests,working as hook function and execute before view functions, and this function is
+# a decorator, it could execute codes before view functions
 @app.before_request
 def my_before_quest():
-    username = session.get('user_username')
-    if username:
-        user = User.query.filter(User.username == username).first()
+    email = session.get('user_email')
+    if email:
+        user = User.query.filter(User.email == email).first()
         g.user = user
+
 
 @app.route('/viewTask/<task_id>')
 @login_required
 def viewTask(task_id):
     record = Record.query.filter(task_id == Record.id).first()
     if record:
-        return render_template('./HTML/viewTask.html', passing_data=passing_data, record=record)
+        return render_template('./HTML/viewTask.html', record=record)
     else:
-        return render_template('./HTML/error.html', passing_data=passing_data)
+        return render_template('./HTML/error.html')
 
 
 @app.route('/addTask/')
@@ -227,7 +226,7 @@ def changeTask(task_id):
         record.description = description
         db.session.commit()
     else:
-        return render_template('./HTML/error.html', passing_data=passing_data)
+        return render_template('./HTML/error.html')
     return redirect(url_for('viewAll'))
 
 
@@ -240,22 +239,23 @@ def removeTask(task_id):
         db.session.delete(record)
         db.session.commit()
     else:
-        return render_template('./HTML/error.html', passing_data=passing_data)
+        return render_template('./HTML/error.html')
     return redirect(request.referrer)
 
 
 if __name__ == '__main__':
-    # 删除表
+    # delete all tables
     # db.drop_all()
-    # 创建表
-    # db.create_all()
+    # create al tables
+    db.create_all()
 
     # set default user admin
-    exists = User.query.filter(User.username == 'admin').scalar()
-    if exists == None:
-        admin = User(username='admin', password='admin')
-        db.session.add(admin)
-        db.session.commit()
+    # 重写！！！！
+    # exists = User.query.filter(User.username == 'admin').scalar()
+    # if exists == None:
+    #     admin = User(username='admin', password='admin')
+    #     db.session.add(admin)
+    #     db.session.commit()
 
 
     # user = User(username='dazha',password='111')
@@ -280,14 +280,4 @@ if __name__ == '__main__':
     # record4 = Record(description='a234', title='dem34o', status=False, user_id=2)
     # db.session.add(record4)
     # db.session.commit()
-
-
-    # new_da = Record.query.filter(Record.user_id=='1').first()
-    # new_u = User.query.filter(User.username=='dazha').first()
-    # print(new_da.user.username)
-    # # 注意反向引用调用的结果需要用for遍历
-    # for i in new_u.records:
-    #     print(i.title)
-
-
     app.run()

@@ -1,119 +1,73 @@
 {% extends './HTML/template.html' %}
 {% block main %}
 
-
-
-
 <div class="container grey">
     <div class="row">
-            <div class="col-md-2">
-                <div class="head">
-                    Title
-                </div>
-                <br>
+        <div class="col-md-2">
+            <div class="head">
+                Title
             </div>
-            <div class="col-md-10">
-                
-                </div>
-
+            <br>
         </div>
-
-        
-        <form action="{{ url_for('changeTask', task_id=record.id) }}" onsubmit="return addCheck()">
-
+        <div class="col-md-10">
+        </div>
+    </div>
+    <form action="{{ url_for('changeTask', task_id=record.id) }}" onsubmit="return addCheck()">
         <div class="row">
-
             <div class="col-md-12">
-                    <div class="input-group input-group-lg">
-
-                        <input id="title" name="title" class="form-control" type="text" value="{{ record.title }}">
-
-                    </div>
+                <div class="input-group input-group-lg">
+                    <input id="title" name="title" class="form-control" type="text" value="{{ record.title }}">
+                </div>
             </div>
         </div>
-
         <div class="row">
             <div class="head">
                 &nbsp Description
-          </div>
-          
+            </div>
             <div class="col-md-12">
                 <br>
-                    <div class="form-group">
-                        <textarea id="description" name="description" class="form-control" rows="7">{{ record.description }}</textarea>
-                    </div>
+                <div class="form-group">
+                    <textarea id="description" name="description" class="form-control"
+                        rows="7">{{ record.description }}</textarea>
                 </div>
-        </div>
-
-        <div class="row">
-
-            <div class="col-md-6">
-            
-            <div class="head">
-                 Create time
-          </div>
-          </div>
-
-          <div class="col-md-6">
-            
-            <div class="head">
-                Completed time
-          </div>
-          </div>
-
-
             </div>
-          <div class="row">
-
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="head">
+                    Create time
+                </div>
+            </div>
             <div class="col-md-6">
 
-                    
+                <div class="head">
+                    Completed time
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <div class="black">
                     {{ record.date }}
                 </div>
-                
-                </div>
-
-                <div class="col-md-6">
-
-                    
-                    <div class="black">
-                        
+            </div>
+            <div class="col-md-6">
+                <div class="black">
                     {% if record.finish_time %}
-                        {{ record.finish_time }}
+                    {{ record.finish_time }}
                     {% else %}
                     <div>
-                          This task is unfinished.
+                        This task is unfinished.
                     </div>
                     {% endif %}
-                    </div>
-                    
-                    </div>
-
-
-        </div>
-
-                
-        <div class="row">
-
-                    <button id="submit-task" type="submit" class="btn btn-lg btn-success submit-btn">submit</button>
-
-
+                </div>
             </div>
-
-        </form>
-
-    </div>
-
-    
-
-
+        </div>
+        <div class="row">
+            <button id="submit-task" type="submit" class="btn btn-lg btn-success submit-btn">submit</button>
+        </div>
+    </form>
 </div>
-
-<br>
-    <br>
-    <br>
-    <br>
 <br>
 <br>
 <br>
@@ -121,9 +75,6 @@
 <br>
 <br>
 <br>
-    <br>
-    <br>
-    <br>
 <br>
 <br>
 <br>
@@ -131,7 +82,11 @@
 <br>
 <br>
 <br>
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 {% endblock %}
-

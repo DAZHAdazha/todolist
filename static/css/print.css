@@ -204,7 +204,7 @@ img {
     line-height: 1.35em;
 }
 
-label.item:hover{
+label.item:hover {
     text-decoration: underline;
 }
 
@@ -304,11 +304,13 @@ span.line-through {
 }
 
 .container #top {
-    right:2em;;
+    right: 2em;
+    ;
     bottom: 6em;
     position: fixed;
     z-index: 999;
 }
+
 .bad {
     text-align: center;
     font-size: 70px;
@@ -363,168 +365,204 @@ li {
     color: #A2E8D2;
 }
 
-::-webkit-input-placeholder{
+::-webkit-input-placeholder {
     color: rgba(170, 170, 170, 0.685);
 }
-::-moz-placeholder{
+
+::-moz-placeholder {
     color: rgba(170, 170, 170, 0.685);
 }
-:-moz-placeholder{
+
+:-moz-placeholder {
     color: rgba(170, 170, 170, 0.685);
 }
-:-ms-input-placeholder{
+
+:-ms-input-placeholder {
     color: rgba(170, 170, 170, 0.685);
 }
-.btn-danger{
+
+.btn-danger {
     margin-left: 2em;
     margin-bottom: 1em;
 }
-.col-lg-2{
+
+.col-lg-2 {
     padding: 20px;
     border-radius: 15px;
 }
-.col-md-3 img:hover{
+
+.col-md-3 img:hover {
     transform: scale(1.1);
     cursor: pointer;
 }
-.col-md-3 img{
+
+.col-md-3 img {
     transition: all 0.5s;
 }
-.carousel-item.active img:hover{
+
+.carousel-item.active img:hover {
     transform: scale(1.1);
     cursor: pointer;
 }
-.carousel-item.active img{
+
+.carousel-item.active img {
     transition: all 0.5s;
 }
-.grey{
+
+.grey {
     background-color: #DDDDDD;
 }
-.status{
+
+.status {
     margin-top: 5px;
     margin-bottom: 5px;
     color: rgb(255, 195, 0);
     margin-left: 3%;
 }
-.input-info{
-    color:#444;
+
+.input-info {
+    color: #444;
     margin-top: 5px;
     margin-bottom: 5px;
 }
-.hidden{
+
+.hidden {
     visibility: hidden;
 }
-.red{
+
+.red {
     border-color: rgb(245, 40, 84);
-    
+
 }
 
-.green{
+.green {
     box-shadow: rgb(29, 216, 92);
-    
+
 }
 
-#sign-btn{
-    margin-left:40%;
-    margin-top:5%;
-    margin-bottom:5%;
+#sign-btn {
+    margin-left: 40%;
+    margin-top: 5%;
+    margin-bottom: 5%;
     background-color: #AFB7FF;
-    border-color:#AFB7FF;
+    border-color: #AFB7FF;
 }
+
 #password,
-#repeat-password{
+#repeat-password {
     -webkit-user-select: none;
-	-ms-user-select: none;
+    -ms-user-select: none;
     -moz-select: none;
-	user-select: none;
+    user-select: none;
 }
-.none{
+
+.none {
     height: 1px;
     width: 1px;
 }
-#sign-form{
+
+#sign-form {
     background-color: rgb(255, 255, 255);
     border-radius: 15px;
     margin-bottom: 40px;
 }
-.star{
+
+.star {
     float: right;
     margin-right: 0%;
 }
+
 .carousel-control-prev-icon,
-.carousel-control-next-icon{
+.carousel-control-next-icon {
     margin-top: 13em;
 }
-.center{
+
+.center {
     text-align: center;
 }
-#print{
+
+#print {
     float: right;
     background-color: #cccccc;
     transition: all 0.5s;
 }
-#print:hover{
+
+#print:hover {
     transform: scale(1.1);
 }
-#verification{
+
+#verification {
     max-height: 48px;
     margin-right: 10px;
     margin-left: 10px;
 }
-#verification:hover{
+
+#verification:hover {
     cursor: pointer;
 }
-.clear-padding{
+
+.clear-padding {
     padding: 0;
 }
-#refresh{
+
+#refresh {
     height: 48px;
     float: right;
     transition: all 0.5s;
 }
-#refresh:hover{
+
+#refresh:hover {
     cursor: pointer;
     transform: scale(1.1);
 }
-#log-in{
+
+#log-in {
     display: none;
 }
 
-.user{
+.user {
     font-size: 1.8em;
     color: #a39f9f;
 }
-.user_text{
-    border:  1px;
+
+.user_text {
+    border: 1px;
     border-radius: 5px;
     line-height: 1.7em;
 }
-.user_text:last-child{
+
+.user_text:last-child {
     margin-bottom: 50px;
 }
-.user_text:first-child{
+
+.user_text:first-child {
     margin-top: 50px;
 }
-.user img{
+
+.user img {
     margin: 0 auto;
     transition: all 1.5s;
 }
-.user img:hover{
+
+.user img:hover {
     cursor: pointer;
     transform: scale(1.1);
     transform: rotate(360deg);
 }
-#container{
+
+#container {
     float: right;
-    height:500px;
-    width:500px;
-}  
-#log_out{
+    height: 500px;
+    width: 500px;
+}
+
+#log_out {
     margin-left: 40%;
     margin-bottom: 50px;
     margin-top: 30px;
 }
-.user_info{
+
+.user_info {
     margin-left: 10px;
     color: rgb(78, 73, 73);
 }

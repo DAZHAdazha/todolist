@@ -6,37 +6,25 @@
 
 <div class="container">
     <div class="row">
-            <div class="col-md-1">
-            </div>
-
-            <div class="col-md-10">
-
-                <div class="home">
-                    
-                    <div>
-                        <p>To do!</p>
-                        <p>Create your own </p>
-                        <p>to do list!</p>
-                    </div>
-                                <br>
-                    
-                                <a href="{{ url_for('newTask') }}">
-                                    <img id="new" title="new" src="{{ url_for('static', filename='img/new.png') }}" alt="new">
-                                </a>
-
-                                <br>
-
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="home">
+                <div>
+                    <p>To do!</p>
+                    <p>Create your own </p>
+                    <p>to do list!</p>
                 </div>
-
-
+                <br>
+                <a href="{{ url_for('newTask') }}">
+                    <img id="new" title="new" src="{{ url_for('static', filename='img/new.png') }}" alt="new">
+                </a>
+                <br>
+            </div>
             <div class="col-md-1">
             </div>
-            
-
         </div>
     </div>
 </div>
-
-
 
 {% endblock %}
