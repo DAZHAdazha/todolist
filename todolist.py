@@ -53,19 +53,19 @@ def jump_to(file):
     return render_template('./' + file)
 
 
-@app.route('/HTML/newTask.html')
+@app.route('/HTML/createTask.html')
 @login_required
-def newTask():
-    return render_template('./HTML/newTask.html')
+def createTask():
+    return render_template('./HTML/createTask.html')
 
 
-@app.route('/HTML/user.html')
+@app.route('/HTML/user-.html')
 @login_required
 def user():
     record_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id).scalar()
     completed_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id, Record.status == True).scalar()
     uncompleted_count = record_count - completed_count
-    return render_template('./HTML/user.html', record_count=record_count,
+    return render_template('./HTML/user-.html', record_count=record_count,
                            completed_count=completed_count, uncompleted_count=uncompleted_count)
 
 
@@ -123,7 +123,6 @@ def my_context_processor():
 @login_required
 def logout():
     del session['user_email']
-    print("here")
     return redirect(url_for('login'))
 
 
@@ -132,7 +131,7 @@ def logout():
 def viewAll():
     record_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id).scalar()
     records = Record.query.filter(g.user.id == Record.user_id).order_by('id')
-    return render_template('./HTML/search_result.html', records=records, count=record_count)
+    return render_template('./HTML/new.html', records=records, count=record_count)
 
 
 @app.route('/viewCompleted/')
@@ -141,7 +140,7 @@ def viewCompleted():
     completed_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id, Record.status ==
                                                                      True).scalar()
     records = Record.query.filter(g.user.id == Record.user_id, Record.status == True).order_by('id')
-    return render_template('./HTML/search_result.html', records=records, count=completed_count)
+    return render_template('./HTML/new.html', records=records, count=completed_count)
 
 
 @app.route('/viewUnompleted/')
@@ -150,7 +149,7 @@ def viewUncompleted():
     uncompleted_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id, Record.status ==
                                                                      False).scalar()
     records = Record.query.filter(g.user.id == Record.user_id, Record.status == False).order_by('id')
-    return render_template('./HTML/search_result.html',records=records, count=uncompleted_count)
+    return render_template('./HTML/new.html',records=records, count=uncompleted_count)
 
 @app.route('/taskStatus/<task_id>')
 @login_required
@@ -173,13 +172,14 @@ def taskStatus(task_id):
 @app.route('/search/')
 @login_required
 def search():
-    print('here')
     q = request.args.get('q')
     count = db.session.query(func.count(Record.id)).filter(or_(Record.title.contains(q), Record.description.contains(q),
                                       Record.date.contains(q), Record.finish_time.contains(q)), g.user.id == Record.user_id).scalar()
     records = Record.query.filter(or_(Record.title.contains(q), Record.description.contains(q),
                                       Record.date.contains(q), Record.finish_time.contains(q)), g.user.id == Record.user_id).order_by('id')
-    return render_template('./HTML/search_result.html', records=records, count=count)
+    # return render_template('./HTML/search_result.html', records=records, count=count)
+    return render_template('./HTML/new.html', records=records, count=count)
+
 
 
 # before_request: execute before requests,working as hook function and execute before view functions, and this function is
@@ -192,12 +192,12 @@ def my_before_quest():
         g.user = user
 
 
-@app.route('/viewTask/<task_id>')
+@app.route('/task/<task_id>')
 @login_required
-def viewTask(task_id):
+def task(task_id):
     record = Record.query.filter(task_id == Record.id).first()
     if record:
-        return render_template('./HTML/viewTask.html', record=record)
+        return render_template('./HTML/task.html', record=record)
     else:
         return render_template('./HTML/error.html')
 
@@ -212,7 +212,7 @@ def addTask():
     new_record = Record(user_id=current_user_id, date=current_time, title=title, description=description)
     db.session.add(new_record)
     db.session.commit()
-    return redirect(request.referrer)
+    return redirect(url_for('viewAll'))
 
 
 @app.route('/changeTask/<task_id>')
@@ -228,7 +228,6 @@ def changeTask(task_id):
     else:
         return render_template('./HTML/error.html')
     return redirect(url_for('viewAll'))
-
 
 
 @app.route('/removeTask/<task_id>')
@@ -247,7 +246,7 @@ if __name__ == '__main__':
     # delete all tables
     # db.drop_all()
     # create al tables
-    db.create_all()
+    # db.create_all()
 
     # set default user admin
     # 重写！！！！
@@ -273,11 +272,15 @@ if __name__ == '__main__':
     # record2 = Record(description='a aa', title='dem2o', status=True, user_id=1)
     # db.session.add(record2)
     #
-    # record3 = Record(description='a aa3', title='dem3o', status=True, user_id=2)
+    # record3 = Record(description='a aa3', title='dem3o', status=True, user_id=1)
     # db.session.add(record3)
     #
     #
-    # record4 = Record(description='a234', title='dem34o', status=False, user_id=2)
+    # record4 = Record(description='a2dem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4odem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4odem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4o34', title='dem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4o', status=False, user_id=1)
     # db.session.add(record4)
+    # db.session.commit()
+    #
+    # record5 = Record(description='a2dem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaa4o34', title='dem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4o', status=False, user_id=1,date=datetime.datetime.now())
+    # db.session.add(record5)
     # db.session.commit()
     app.run()

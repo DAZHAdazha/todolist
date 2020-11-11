@@ -8,7 +8,5 @@ def login_required(func):
         if session.get('user_email'):
             return func(*args, **kwargs)
         else:
-            print('fuck')
             return redirect(url_for('login'))
-            # return render_template('./HTML/log-in.html')
     return wrapper

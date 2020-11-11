@@ -664,6 +664,12 @@ input[type='checkbox'] {
 	height: 1.75rem;
 }
 
+.logo-image{
+	text-decoration: none;
+	font-size: 35px;
+}
+
+
 .navbar-custom .navbar-brand.logo-text {
 	font: 700 2rem/1.5rem "Open Sans", sans-serif;
 	color: #fff;;
