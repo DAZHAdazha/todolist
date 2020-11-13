@@ -1,10 +1,3 @@
-/* Template: Tivo - SaaS App HTML Landing Page Template
-   Author: Inovatik
-   Created: Sep 2019
-   Description: Custom JS file
-*/
-
-
 (function($) {
     "use strict"; 
 	
@@ -174,20 +167,6 @@
 		var email = $("#semail").val();
 		var name = $("#sname").val();
 		var password = $("#spassword").val();
-        
-        // $.ajax({
-        //     type: "POST",
-        //     url: "php/signupform-process.php",
-        //     data: "email=" + email + "&name=" + name + "&password=" + password + "&terms=" + terms, 
-        //     success: function(text) {
-        //         if (text == "success") {
-        //             sformSuccess();
-        //         } else {
-        //             sformError();
-        //             ssubmitMSG(false, text);
-        //         }
-        //     }
-        // });
         var path = window.location.href.toString();
         $.post(path,{username: name, password: password, email:email},
             function(data){
@@ -199,7 +178,7 @@
                 }
                 else{
                     sformError();
-                    ssubmitMSG(false, text);
+                    ssubmitMSG(false, data);
                 }
             });  //post request {}内为传递的数据, function为请求成功运行的函数 重要！！！
 	}
@@ -256,24 +235,9 @@
                 }
                 else{
                     lformError();
-                    lsubmitMSG(false, text);
+                    lsubmitMSG(false, data);
                 }
             });  //post request {}内为传递的数据, function为请求成功运行的函数 重要！！！
-        
-        // $.ajax({
-        //     type: "POST",
-        //     url: "php/loginform-process.php",
-        //     data: "email=" + email + "&password=" + password, 
-        //     success: function(text) {
-        //         if (text == "success") {
-        //             lformSuccess();
-        //         } else {
-        //             lformError();
-        //             lsubmitMSG(false, text);
-        //         }
-        //     }
-        // });
-
     };
 
     function lformSuccess() {
@@ -297,52 +261,10 @@
         $("#lmsgSubmit").removeClass().addClass(msgClasses).text(msg);
     }
 
-
-    /* Newsletter Form */
-    // $("#newsletterForm").validator().on("submit", function(event) {
-    // 	if (event.isDefaultPrevented()) {
-    //         // handle the invalid form...
-    //         nformError();
-    //         nsubmitMSG(false, "Please fill all fields!");
-    //     } else {
-    //         // everything looks good!
-    //         event.preventDefault();
-    //         nsubmitForm();
-    //     }
-    // });
-
     function nsubmitForm() {
         // initiate variables with form content
         var search = $("#search").val();
         var path = window.location.href.toString() + 'search/'
-        // $.post(path,{search:search},
-        //     function(data){
-        //         if(data == '1'){
-        //             nformSuccess();
-        //             // var href = "./user.html";
-        //             var href = "./index.html";
-        //             window.location.replace(href);
-        //         }
-        //         else{
-        //             nformError();
-        // //             nsubmitMSG(false, text);
-        //         }
-        //     });  //post request {}内为传递的数据, function为请求成功运行的函数 重要！！！
-        
-
-        // $.ajax({
-        //     type: "POST",
-        //     url: "php/newsletterform-process.php",
-        //     data: "email=" + email + "&terms=" + terms, 
-        //     success: function(text) {
-        //         if (text == "success") {
-        //             nformSuccess();
-        //         } else {
-        //             nformError();
-        //             nsubmitMSG(false, text);
-        //         }
-        //     }
-        // });
 	}
 
     function nformSuccess() {

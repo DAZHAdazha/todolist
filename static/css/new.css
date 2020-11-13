@@ -40,6 +40,11 @@ i {
 
 .widget-subheading {
     color: #858a8e;
+    text-align: left;
+}
+
+.widget-heading {
+    text-align: left;
 }
 
 .card-header.card-header-tab .card-header-title {
@@ -70,7 +75,7 @@ i {
 
 .scroll-area-sm {
     /* height: 288px; */
-    height: 488px;
+    height: 550px;
     overflow-x: hidden
 }
 

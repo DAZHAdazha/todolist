@@ -59,13 +59,13 @@ def createTask():
     return render_template('./HTML/createTask.html')
 
 
-@app.route('/HTML/user-.html')
+@app.route('/HTML/user.html')
 @login_required
 def user():
     record_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id).scalar()
     completed_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id, Record.status == True).scalar()
     uncompleted_count = record_count - completed_count
-    return render_template('./HTML/user-.html', record_count=record_count,
+    return render_template('./HTML/user.html', record_count=record_count,
                            completed_count=completed_count, uncompleted_count=uncompleted_count)
 
 
@@ -75,7 +75,7 @@ def signup():
         data = request.form
         user = User.query.filter(User.email == data['email']).first()
         if user:
-            return '0'
+            return "This email had been registered"
         else:
             new_user = User(username=data['username'], password=data['password'], email=data['email'])
             db.session.add(new_user)
@@ -100,9 +100,9 @@ def login():
                     session.permanent = False
                 return '1'
             else:
-                return '2'
+                return "Wrong password, please try again"
         else:
-            return '0'
+            return "Wrong email address,please try again"
     else:
         return render_template('./HTML/log-in.html')
 
@@ -129,27 +129,22 @@ def logout():
 @app.route('/viewAll/')
 @login_required
 def viewAll():
-    record_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id).scalar()
     records = Record.query.filter(g.user.id == Record.user_id).order_by('id')
-    return render_template('./HTML/new.html', records=records, count=record_count)
+    return render_template('./HTML/result.html', records=records)
 
 
 @app.route('/viewCompleted/')
 @login_required
 def viewCompleted():
-    completed_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id, Record.status ==
-                                                                     True).scalar()
     records = Record.query.filter(g.user.id == Record.user_id, Record.status == True).order_by('id')
-    return render_template('./HTML/new.html', records=records, count=completed_count)
+    return render_template('./HTML/result.html', records=records)
 
 
 @app.route('/viewUnompleted/')
 @login_required
 def viewUncompleted():
-    uncompleted_count = db.session.query(func.count(Record.id)).filter(Record.user_id == g.user.id, Record.status ==
-                                                                     False).scalar()
     records = Record.query.filter(g.user.id == Record.user_id, Record.status == False).order_by('id')
-    return render_template('./HTML/new.html',records=records, count=uncompleted_count)
+    return render_template('./HTML/result.html',records=records)
 
 @app.route('/taskStatus/<task_id>')
 @login_required
@@ -173,12 +168,9 @@ def taskStatus(task_id):
 @login_required
 def search():
     q = request.args.get('q')
-    count = db.session.query(func.count(Record.id)).filter(or_(Record.title.contains(q), Record.description.contains(q),
-                                      Record.date.contains(q), Record.finish_time.contains(q)), g.user.id == Record.user_id).scalar()
     records = Record.query.filter(or_(Record.title.contains(q), Record.description.contains(q),
                                       Record.date.contains(q), Record.finish_time.contains(q)), g.user.id == Record.user_id).order_by('id')
-    # return render_template('./HTML/search_result.html', records=records, count=count)
-    return render_template('./HTML/new.html', records=records, count=count)
+    return render_template('./HTML/result.html', records=records)
 
 
 
@@ -249,12 +241,11 @@ if __name__ == '__main__':
     # db.create_all()
 
     # set default user admin
-    # 重写！！！！
-    # exists = User.query.filter(User.username == 'admin').scalar()
-    # if exists == None:
-    #     admin = User(username='admin', password='admin')
-    #     db.session.add(admin)
-    #     db.session.commit()
+    exists = User.query.filter(User.email == 'admin@qq.com').scalar()
+    if exists == None:
+        admin = User(email="admin@qq.com", username='admin', password='admin')
+        db.session.add(admin)
+        db.session.commit()
 
 
     # user = User(username='dazha',password='111')

@@ -1,0 +1,127 @@
+{% extends './HTML/template.html' %}
+{% block main %}
+
+<!-- Header -->
+<header id="header" class="ex-2-header">
+    <div class="container">
+
+        <div class="row d-flex justify-content-center container">
+            <div class="col-lg-12">
+                <div class="card-hover-shadow-2x mb-3 card">
+                    <div class="card-header-tab card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i
+                                class="fa fa-tasks"></i>&nbsp;Task Lists</div>
+                    </div>
+                    <div class="scroll-area-sm">
+                        <perfect-scrollbar class="ps-show-limits">
+                            <div style="position: static;" class="ps ps--active-y">
+                                <div class="ps-content">
+                                    <ul class=" list-group list-group-flush">
+                                        {% for record in records %}
+
+                                        <li class="list-group-item">
+                                            {% if loop.index%5 == 0 %}
+                                            <div class="todo-indicator bg-warning"></div>
+                                            {% elif loop.index%5 == 1 %}
+                                            <div class="todo-indicator bg-primary"></div>
+                                            {% elif loop.index%5 == 2 %}
+                                            <div class="todo-indicator bg-info"></div>
+                                            {% else %}
+                                            <div class="todo-indicator bg-success"></div>
+                                            {% endif %}
+                                            <div class="widget-content p-0">
+                                                <div class="widget-content-wrapper">
+                                                    <div class="widget-content-left mr-3">
+                                                        {{ loop.index }}
+                                                    </div>
+                                                    <div class="widget-content-left">
+                                                        <div class="widget-heading">
+                                                            <a href="{{ url_for('task', task_id=record.id) }}">
+                                                                <span class="limit-title">
+                                                                {{ record.title }}
+                                                                </span>
+                                                            </a>
+                                                            
+                                                            <div class="badge badge-pill badge-info ml-2">
+                                                                {{ record.date }}
+                                                            </div>
+                                                            <div class="widget-subheading">
+                                                                <div>
+                                                                    <div class="limit-description">
+                                                                        <a href="{{ url_for('task', task_id=record.id) }}">
+                                                                        <i>{{ record.description }}</i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="widget-content-right">
+                                                        {% if record.status %}
+                                                        <a href="{{ url_for('taskStatus', task_id=record.id) }}"
+                                                            method="GET">
+                                                            <button
+                                                                class="border-0 btn-transition btn btn-outline-success">
+                                                                <i class="fa fa-check"></i>
+                                                            </button>
+                                                        </a>
+                                                        {% else %}
+                                                        <a href="{{ url_for('taskStatus', task_id=record.id) }}"
+                                                            method="GET">
+                                                            <button
+                                                                class="border-0 btn-transition btn btn-outline-danger">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </a>
+                                                        {% endif %}
+                                                        <a href="{{ url_for('removeTask', task_id=record.id) }}"
+                                                            method="GET">
+                                                            <button
+                                                                class="border-0 btn-transition btn btn-outline-danger">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </perfect-scrollbar>
+                    </div>
+                    <div class="d-block text-right card-footer">
+                        <a href="{{ url_for('createTask') }}">
+                        <button class="btn btn-success">
+                            Add Task
+                        </button>
+                        </a>
+                        </div>
+                </div>
+            </div>
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+<!-- end of header -->
+
+
+<!doctype html>
+<html>
+
+<head>
+
+
+    <link href='{{ url_for('static', filename='css/new.css') }}' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/css/bootstrap.min.css') }}">
+</head>
+
+
+<body oncontextmenu='return false' class='snippet-body'>
+    <div class="row d-flex justify-content-center container">
+
+    </div>
+</body>
+
+</html>
+{% endblock %}
