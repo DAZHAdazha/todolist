@@ -42,15 +42,27 @@ passing_data = {'signup_user': 0}
 def index(): # view function
     return render_template('./HTML/index.html')
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('./HTML/error.html'), 404
+
 
 @app.route('/HTML/<file>')
 def jump(file):
-    return render_template('./HTML/' + file)
+    try:
+        return render_template('./HTML/' + file)
+    except:
+        return render_template('./HTML/error.html')
+
 
 
 @app.route('/<file>')
 def jump_to(file):
-    return render_template('./' + file)
+    try:
+        return render_template('./' + file)
+    except:
+        return render_template('./HTML/error.html')
+
 
 
 @app.route('/HTML/createTask.html')
