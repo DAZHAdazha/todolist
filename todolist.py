@@ -42,6 +42,7 @@ passing_data = {'signup_user': 0}
 def index(): # view function
     return render_template('./HTML/index.html')
 
+# capture 404 error
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('./HTML/error.html'), 404
