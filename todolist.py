@@ -48,6 +48,7 @@ def page_not_found(e):
     return render_template('./HTML/error.html'), 404
 
 
+# jump to HTML template if the requiring file exists
 @app.route('/HTML/<file>')
 def jump(file):
     try:
@@ -56,7 +57,7 @@ def jump(file):
         return render_template('./HTML/error.html')
 
 
-
+# similar to previous function
 @app.route('/<file>')
 def jump_to(file):
     try:
@@ -65,13 +66,14 @@ def jump_to(file):
         return render_template('./HTML/error.html')
 
 
-
+# view function to render the page createTask.html
 @app.route('/HTML/createTask.html')
 @login_required
 def createTask():
     return render_template('./HTML/createTask.html')
 
 
+# to render page user.html and passing arguments of 3 type of task counts
 @app.route('/HTML/user.html')
 @login_required
 def user():
@@ -82,13 +84,18 @@ def user():
                            completed_count=completed_count, uncompleted_count=uncompleted_count)
 
 
+#  handling GET and POST request
+# for POST, register this user
+# for GET, to render page sign-up.html
 @app.route('/HTML/sign-up.html', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         data = request.form
         user = User.query.filter(User.email == data['email']).first()
+        # if the email had been used
         if user:
             return "This email had been registered"
+        # else it could be signed up
         else:
             new_user = User(username=data['username'], password=data['password'], email=data['email'])
             db.session.add(new_user)
@@ -99,14 +106,20 @@ def signup():
         return render_template('./HTML/sign-up.html')
 
 
+# handling POST and GET request
+# for POST, to log in the user
+# for GET, to render log-in.html
 @app.route('/HTML/log-in.html', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         data = request.form
         user = User.query.filter(User.email == data['email']).first()
+        # the user is existed
         if user:
+            # the user's password is right
             if user.check_password(data['password']):
                 session['user_email'] = user.email
+                # user ticked the remember-me option
                 if data['remember'] == 'true':
                     session.permanent = True
                 else:
@@ -132,6 +145,7 @@ def my_context_processor():
         return {}
 
 
+# logout view function, delete the sessions
 @app.route('/logout/')
 @login_required
 def logout():
@@ -139,6 +153,7 @@ def logout():
     return redirect(url_for('login'))
 
 
+# function to see all tasks owned by the user
 @app.route('/viewAll/')
 @login_required
 def viewAll():
@@ -146,6 +161,7 @@ def viewAll():
     return render_template('./HTML/result.html', records=records)
 
 
+# function to see all completed tasks owned by the user
 @app.route('/viewCompleted/')
 @login_required
 def viewCompleted():
@@ -153,20 +169,26 @@ def viewCompleted():
     return render_template('./HTML/result.html', records=records)
 
 
+# function to see all uncompleted tasks owned by the user
 @app.route('/viewUnompleted/')
 @login_required
 def viewUncompleted():
     records = Record.query.filter(g.user.id == Record.user_id, Record.status == False).order_by('id')
     return render_template('./HTML/result.html',records=records)
 
+
+# function to change task status(completed or uncompleted)
 @app.route('/taskStatus/<task_id>')
 @login_required
 def taskStatus(task_id):
     record = Record.query.filter(task_id == Record.id).first()
+    # if the record is founded
     if record:
+        # if it is true, then set to false, and erase finish time
         if record.status == True:
             record.status = False
             record.finish_time = None
+        # else, set to true, and update finish time
         else:
             record.status = True
             current_time = datetime.datetime.now()
@@ -177,6 +199,7 @@ def taskStatus(task_id):
     return redirect(request.referrer)
 
 
+# function to handle search request, search for title, description, date, finish time
 @app.route('/search/')
 @login_required
 def search():
@@ -197,6 +220,7 @@ def my_before_quest():
         g.user = user
 
 
+# function to check specific task
 @app.route('/task/<task_id>')
 @login_required
 def task(task_id):
@@ -207,6 +231,7 @@ def task(task_id):
         return render_template('./HTML/error.html')
 
 
+# function to add a new task
 @app.route('/addTask/')
 @login_required
 def addTask():
@@ -220,6 +245,7 @@ def addTask():
     return redirect(url_for('viewAll'))
 
 
+# function to update a task
 @app.route('/changeTask/<task_id>')
 @login_required
 def changeTask(task_id):
@@ -235,6 +261,7 @@ def changeTask(task_id):
     return redirect(url_for('viewAll'))
 
 
+# function to delete a task
 @app.route('/removeTask/<task_id>')
 @login_required
 def removeTask(task_id):
@@ -248,6 +275,7 @@ def removeTask(task_id):
 
 
 if __name__ == '__main__':
+    # !!! only fun for the first time to create all tables in database !!!
     # delete all tables
     # db.drop_all()
     # create al tables
@@ -259,32 +287,4 @@ if __name__ == '__main__':
         admin = User(email="admin@qq.com", username='admin', password='admin')
         db.session.add(admin)
         db.session.commit()
-
-
-    # user = User(username='dazha',password='111')
-    # db.session.add(user)
-    #
-    #
-    # record = Record(description='a new task', title='demo', status=True, user_id=1)
-    # db.session.add(record)
-    # db.session.commit()
-    #
-    # user2 = User(username='da',password='121')
-    # db.session.add(user2)
-    #
-    #
-    # record2 = Record(description='a aa', title='dem2o', status=True, user_id=1)
-    # db.session.add(record2)
-    #
-    # record3 = Record(description='a aa3', title='dem3o', status=True, user_id=1)
-    # db.session.add(record3)
-    #
-    #
-    # record4 = Record(description='a2dem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4odem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4odem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4o34', title='dem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4o', status=False, user_id=1)
-    # db.session.add(record4)
-    # db.session.commit()
-    #
-    # record5 = Record(description='a2dem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaa4o34', title='dem3sdadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4o', status=False, user_id=1,date=datetime.datetime.now())
-    # db.session.add(record5)
-    # db.session.commit()
     app.run()
