@@ -26,12 +26,20 @@
                     <!-- Newsletter Form -->
                     <form action="{{ url_for('changeTask', task_id=record.id) }}" data-toggle="validator" data-focus="false">
                         <div class="form-group">
-                            <input type="text" name="title" class="form-control-input" id="new_title" value="{{ record.title }}" required>
+                            <input type="text" style="font-weight:bolder" name="title" class="form-control-input" id="new_title" placeholder="enter title" value="{{ record.title }}" required>
                             <div class="help-block with-errors"></div>
                         </div>
 
                         <div class="form-group">
-                            <textarea class="form-control-input" name="description" id="new_description" rows="7" required>{{ record.description }}</textarea>
+                            {% if record.tag %}
+                            <input type="text" style="font-weight:bolder" name="tag" class="form-control-input" placeholder="enter tag(optional)" id="new_tag" value="{{ record.tag }}">
+                            {% else %}
+                            <input type="text" style="font-weight:bolder" name="tag" class="form-control-input" placeholder="enter tag(optional)" id="new_tag">
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <textarea class="form-control-input" style="font-weight:bolder" name="description" placeholder="enter description" id="new_description" rows="7" required>{{ record.description }}</textarea>
                             <div class="help-block with-errors"></div>
                         </div>
 

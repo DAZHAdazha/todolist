@@ -42,6 +42,7 @@ passing_data = {'signup_user': 0}
 def index(): # view function
     return render_template('./HTML/index.html')
 
+
 # capture 404 error
 @app.errorhandler(404)
 def page_not_found(e):
@@ -205,7 +206,9 @@ def taskStatus(task_id):
 def search():
     q = request.args.get('q')
     records = Record.query.filter(or_(Record.title.contains(q), Record.description.contains(q),
-                                      Record.date.contains(q), Record.finish_time.contains(q)), g.user.id == Record.user_id).order_by('id')
+                                      Record.date.contains(q), Record.finish_time.contains(q),
+                                      Record.tag.contains(q)),
+                                  g.user.id == Record.user_id).order_by('id')
     return render_template('./HTML/result.html', records=records)
 
 
@@ -237,9 +240,10 @@ def task(task_id):
 def addTask():
     title = request.args.get('title')
     description = request.args.get('description')
+    tag = request.args.get('tag')
     current_time = datetime.datetime.now()
     current_user_id = g.user.id
-    new_record = Record(user_id=current_user_id, date=current_time, title=title, description=description)
+    new_record = Record(user_id=current_user_id, date=current_time, title=title, description=description, tag=tag)
     db.session.add(new_record)
     db.session.commit()
     return redirect(url_for('viewAll'))
@@ -253,8 +257,10 @@ def changeTask(task_id):
     if record:
         title = request.args.get('title')
         description = request.args.get('description')
+        tag = request.args.get('tag')
         record.title = title
         record.description = description
+        record.tag = tag
         db.session.commit()
     else:
         return render_template('./HTML/error.html')

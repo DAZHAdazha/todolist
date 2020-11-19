@@ -1,12 +1,12 @@
 {% extends './HTML/template.html' %}
 {% block main %}
 
-<!-- Header -->
+
 <header id="header" class="ex-2-header">
     <div class="container">
-
-        <div class="row d-flex justify-content-center container">
+        <div class="row">
             <div class="col-lg-12">
+
                 <div class="card-hover-shadow-2x mb-3 card">
                     <div class="card-header-tab card-header">
                         <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i
@@ -26,6 +26,8 @@
                                             <div class="todo-indicator bg-primary"></div>
                                             {% elif loop.index%5 == 2 %}
                                             <div class="todo-indicator bg-info"></div>
+                                            {% elif loop.index%5 == 3 %}
+                                            <div class="todo-indicator bg-danger"></div>
                                             {% else %}
                                             <div class="todo-indicator bg-success"></div>
                                             {% endif %}
@@ -41,10 +43,36 @@
                                                                 {{ record.title }}
                                                                 </span>
                                                             </a>
-                                                            
+
                                                             <div class="badge badge-pill badge-info ml-2">
                                                                 {{ record.date }}
                                                             </div>
+
+                                                            {% if record.tag %}
+                                                                {% if loop.index%5 == 0 %}
+                                                                <div class="badge badge-danger ml-2">
+                                                                    {{ record.tag }}
+                                                                </div>
+                                                                {% elif loop.index%5 == 1 %}
+                                                                <div class="badge badge-primary ml-2">
+                                                                    {{ record.tag }}
+                                                                </div>
+                                                                {% elif loop.index%5 == 2 %}
+                                                                <div class="badge badge-info ml-2">
+                                                                    {{ record.tag }}
+                                                                </div>
+                                                                {% elif loop.index%5 == 3 %}
+                                                                <div class="badge badge-warning ml-2">
+                                                                    {{ record.tag }}
+                                                                </div>
+                                                                {% else %}
+                                                                <div class="badge badge-success ml-2">
+                                                                    {{ record.tag }}
+                                                                </div>
+                                                                {% endif %}
+                                                            {% endif %}
+
+
                                                             <div class="widget-subheading">
                                                                 <div>
                                                                     <div class="limit-description">

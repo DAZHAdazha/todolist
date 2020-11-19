@@ -30,7 +30,8 @@ class Record(db.Model):
     date = db.Column(db.DateTime, nullable=True)
     finish_time = db.Column(db.DateTime)
     status = db.Column(db.Boolean, nullable=True, default=False)
+    tag = db.Column(db.Text(20))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     def __repr__(self):
-        return '<id:%d title:%s description:%s date:%s finish_time:%s status:%d user_id:%s' % \
-               (self.id,self.title, self.description, self.date, self.finish_time, self.status, self.user_id)
+        return '<id:%d title:%s description:%s date:%s finish_time:%s status:%d tag:%s user_id:%s' % \
+               (self.id, self.title, self.description, self.date, self.finish_time, self.status, self.tag, self.user_id)
